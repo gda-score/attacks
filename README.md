@@ -10,6 +10,8 @@ See https://www.gda-score.org/quick-guide-to-writing-attacks/ for an overview of
 
 # To Use
 
+To run the tools, you must first install the package `gda-score-code` (see README under `code` repository)
+
 This folder contains attacks as well as examples of how to design an attack. Best to just take one of the existing attacks as a template and work from there.  The `examples` folder contains additional snippits of code showing how to use different aspects of the attack API (class `gdaAttack()`, class `gdaScores()` etc.)
 
 To run an attack, a `results` folder must be placed in the path where the attack is being executed.
