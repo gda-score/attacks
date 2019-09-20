@@ -18,7 +18,7 @@ To run an attack, a `results` folder must be placed in the path where the attack
 
 The main folder contains the attacks themselves. Typically each attack consists of the basic attack code (python) and the configuration for the attack (corresponding .json with the same file name).
 
-The .json config file contains the set of anonymization methods to attack (`anonTypes`), the set of datasets to attack (`tables`), and basic parameters (`basic`). It is important to set `criteria` to the correct type of attack measure (singlingOut, inference, or linkability).
+Each .json config file contains the set of anonymization methods to attack (`anonTypes`), the set of datasets to attack (`tables`), and basic parameters (`basic`). It is important to set `criteria` to the correct type of attack measure (singlingOut, inference, or linkability).
 
 ## attacks/examples
 
