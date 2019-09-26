@@ -1,4 +1,3 @@
-
 def checkMatch(score, expect, colName):
     passed = True
     for k,v in expect.items():
