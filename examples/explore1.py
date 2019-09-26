@@ -1,6 +1,6 @@
 import pprint
-from gdascore.gdaScore import gdaAttack
-from gdascore.gdaUtilities import setupGdaAttackParameters
+from gdascore.gdaAttack import gdaAttack
+from gdascore.gdaTools import setupGdaAttackParameters
 
 # This script examines the schema of a raw and anon database, and
 # stores the schema (table names, column names and types) in a data

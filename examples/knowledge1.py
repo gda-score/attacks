@@ -1,6 +1,6 @@
 import pprint
-from gdascore.gdaScore import gdaAttack
-from gdascore.gdaUtilities import setupGdaAttackParameters
+from gdascore.gdaAttack import gdaAttack
+from gdascore.gdaTools import setupGdaAttackParameters
 
 # This script makes prior knowledge queries, and then requests the
 # resulting GDA score. 

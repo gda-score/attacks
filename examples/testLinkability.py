@@ -1,7 +1,8 @@
 import sys
 import pprint
-from gdascore.gdaScore import gdaAttack, gdaScores
-from gdascore.gdaUtilities import setupGdaAttackParameters
+from gdascore.gdaAttack import gdaAttack
+from gdascore.gdaScore import gdaScores
+from gdascore.gdaTools import setupGdaAttackParameters
 from myUtilities import checkMatch
 
 # Anon: None
