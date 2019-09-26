@@ -1,8 +1,9 @@
 import sys
 import pprint
 import itertools
-from gdascore.gdaScore import gdaAttack, gdaScores
-from gdascore.gdaUtilities import setupGdaAttackParameters, comma_ize, makeGroupBy, finishGdaAttack
+from gdascore.gdaAttack import gdaAttack
+from gdascore.gdaScore import gdaScores
+from gdascore.gdaTools import setupGdaAttackParameters, comma_ize, makeGroupBy, finishGdaAttack
 
 pp = pprint.PrettyPrinter(indent=4)
 verbose = True
