@@ -3,7 +3,7 @@ import pprint
 from gdascore.gdaAttack import gdaAttack
 from gdascore.gdaScore import gdaScores
 from gdascore.gdaTools import setupGdaAttackParameters
-from .myUtilities import checkMatch
+from myUtilities import checkMatch
 
 # Anon: None
 # Attack: List DB contents
