@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../anonymization-mechanisms/.idea/anonymization-mechanisms.iml" filepath="$PROJECT_DIR$/../anonymization-mechanisms/.idea/anonymization-mechanisms.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/attacks.iml" filepath="$PROJECT_DIR$/.idea/attacks.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../code/.idea/code.iml" filepath="$PROJECT_DIR$/../code/.idea/code.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../scores/.idea/scores.iml" filepath="$PROJECT_DIR$/../scores/.idea/scores.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../utility/.idea/utility.iml" filepath="$PROJECT_DIR$/../utility/.idea/utility.iml" />
+    </modules>
+  </component>
+</project>
