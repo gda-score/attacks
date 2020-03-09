@@ -10,7 +10,12 @@ See https://www.gda-score.org/quick-guide-to-writing-attacks/ for an overview of
 
 # To Use
 
-To run the tools, you must first install the package `gda-score-code` (see README under `code` repository)
+To run the tools, you must first install the package `gda-score-code`
+
+#### Installing via `pip`:    
+   - step 1: `$ pip install gda-score-code`    
+            
+   - step 2: If you would like to stick to default configuration (common case) then skip this step. Otherwise execute `$ gdascore_init` in your console to modify the configuration.    
 
 This folder contains attacks as well as examples of how to design an attack. Best to just take one of the existing attacks as a template and work from there.  The `examples` folder contains additional snippits of code showing how to use different aspects of the attack API (class `gdaAttack()`, class `gdaScores()` etc.)
 
