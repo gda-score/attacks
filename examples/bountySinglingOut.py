@@ -11,7 +11,7 @@ sys.stdout.flush()
 printAttack = False
 # Set this to true to reduce the number of actual attack runs so
 # that the program doesn't take too long to run
-numUsersAttacked = 100     # set to 200 for full attack --- takes a long time
+numUsersAttacked = 3     # set to 200 for full attack --- takes a long time
 
 # -------------------------- subroutines ---------------------------
 
@@ -20,7 +20,13 @@ def finishUp(x):
     sc = gdaScores(attackResult)
     score = sc.getScores()
     (bounty,score) = sc.getBountyScoreFromScore(score)
-    pp.pprint(score)
+    print('''
+The score returned by `getScores()` contains substantial information about the
+attack, and can for instance be used to generate a GDA Score diagram.
+
+For the purpose of the bounty, the call `getBountyScoreFromScore()` computes and
+returns only the parameters used for the 'Effectiveness' portion of the bounty prize:
+    ''')
     pp.pprint(bounty)
     x.cleanUp()
     quit()
@@ -280,6 +286,9 @@ for first,last in prior:
                      {'col':'lastname','val':last}],
             'guess':[{'col':'frequency','val':maxFreq}]
            }
+    # Note here that if for a different attack, the attacker determined that
+    # there was not sufficient confidence to make a claim, then the attacker
+    # should still do and askClaim()/getClaim(), but set `claim=False`.
     x.askClaim(spec,claim=True)
     reply = x.getClaim()
     if reply['claimResult'] == 'Correct':
@@ -293,13 +302,24 @@ for first,last in prior:
     if printAttack: pp.pprint(reply)
     print(f"Claim for {first} {last} with frequency {maxFreq} is {reply['claimResult']}")
 
+# These parameters were used to determine if confidence could be raised for
+# certain attacks (and therefore not claiming lower-confidence attacks). This 
+# turned out not to be the case.
 avgNumQueriesCorrect = totNumQueriesCorrect / numCorrect
 avgNumQueriesWrong = totNumQueriesWrong / numWrong
 avgRatioExceedCorrect = totRatioExceedCorrect / numCorrect
 avgRatioExceedWrong = totRatioExceedWrong / numWrong
 
-print(f"numQueries: Correct: {avgNumQueriesCorrect}, Wrong: {avgNumQueriesWrong}")
-print(f"ratioExceed: Correct: {avgRatioExceedCorrect}, Wrong: {avgRatioExceedWrong}")
+#print(f"numQueries: Correct: {avgNumQueriesCorrect}, Wrong: {avgNumQueriesWrong}")
+#print(f"ratioExceed: Correct: {avgRatioExceedCorrect}, Wrong: {avgRatioExceedWrong}")
+
+print('''
+Note that the attack up to this point is on a single column, `frequency`. This is
+sufficient for producing an "Effectiveness" score for the bounty, but not for
+producing a "Coverage" score. For this, the attack would need to be repeated for
+every other column (or at least for those where the attacker believes he or she
+can obtain a decent Coverage score).
+''')
 
 finishUp(x)
 
