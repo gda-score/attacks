@@ -15,6 +15,22 @@ numUsersAttacked = 3     # set to 200 for full attack --- takes a long time
 
 # -------------------------- subroutines ---------------------------
 
+def exploreDiffix(x,sql):
+    query = {}
+    query['sql'] = sql
+    # By setting 'db' to 'anonDb', we explore the anonymous service, which in
+    # this case is Diffix Cedar
+    query['db'] = 'anonDb'
+    x.askExplore(query)
+    reply = x.getExplore()
+    if 'answer' in reply:
+        return reply['answer']
+    else:
+        print("exploreDiffix error")
+        pp.pprint(reply)
+        x.cleanUp()
+        quit()
+
 def finishUp(x):
     attackResult = x.getResults()
     sc = gdaScores(attackResult)
@@ -90,9 +106,7 @@ def runAttackQueries(x,first,last,noisyRatios,p):
 
 pp = pprint.PrettyPrinter(indent=4)
 
-verbose = 0
-v = verbose
-doCache = True
+verbose = False
 
 # This config indicates that we are going to do a singling out attack
 # on Diffix using the accounts table of the banking dataset.
@@ -114,6 +128,7 @@ config = {
 # so there is only one parameters structure created.
 paramsList = setupGdaAttackParameters(config)
 params = paramsList[0]
+params['verbose'] = verbose
 pp.pprint(params)
 
 # Make the object for running the attack
@@ -123,34 +138,62 @@ print(" -------------------  Exploration Phase  ------------------------")
 print('''
 There are certain things we can assume are public knowledge about a dataset.
 This includes the table and column names and types, as well as values in
-columns that are common to many users. 
+columns that are common to many users.
 
-The GDA Score library allows you to learn this public knowledge without
-counting it as prior knowledge per se. In other words, knowing this public
-knowledge and using it for an attack will not reduce the bounty prize.
+We can for instance get a list of column names and types:
 ''')
-print("We can get a list of column names and types:")
 colNamesTypes = x.getColNamesAndTypes(dbType='anonDb')
 pp.pprint(colNamesTypes)
-print("Given these columns names, we can look at some common values\n")
-print("Let's start with the publicly known values for column 'frequency'")
-pubFreq = x.getPublicColValues('frequency')
-pp.pprint(pubFreq)
 print('''
-As it so happens, there are only three values in column 'frequency', and
-they are all shown (and therefore presumed to be publicly known). 
-getPublicColValues() also gives the exact number of distinct users that
-the value is assigned to. Note that this exact number is not presumed to be
-public knowledge, though the approximate proportion of each value may be
-presumed known.
+Given these columns names, we can look at some common values. Generally
+one could use getPublicColValues() for that, but for the Diffix Cedar
+bounty program, we regard anything learned from Diffix itself to be 
+public knowledge.
+
+For instance, we can use Diffix to look at the values and row counts 
+of the 'lastname' column in the banking accounts table:
 ''')
-print("Now let's look at the publicly known values for column 'lastname'")
-pubName = x.getPublicColValues('lastname')
-pp.pprint(pubName)
+sql = '''
+    SELECT lastname, count(*)
+    FROM accounts
+    GROUP BY 1
+    ORDER BY 2 desc
+'''
+print(sql)
+
+ans = exploreDiffix(x,sql)
+
 print('''
-There is one last name (Smith) that has enough distinct users (at least 50)
-and which accounts for more than 0.2 percent of all users. No other names
-satisfy these criteria and so are presumed not to be public information.
+Let's look at the first five buckets of the answer.
+''')
+for i,bucket in enumerate(ans):
+    print(bucket)
+    if i > 5: break
+
+print('''
+Note that the first bucket has the value '*' instead of a last name. In
+the Aircloak system, this represents all values that were suppressed because
+there are not enough distinct users to show the last name. From this answer,
+then, we learn that most last names are unique or nearly unique. (Note that
+for numeric columns, NULL is returned instead of '*'.)
+
+Now let's look at the frequency column:
+''')
+
+sql = '''
+    SELECT frequency, count(*)
+    FROM accounts
+    GROUP BY 1
+    ORDER BY 2 desc
+'''
+freqHist = exploreDiffix(x,sql)
+pp.pprint(freqHist)
+
+print('''
+In contrast to 'lastname', 'frequency' does not indicate any suppression
+(no '*' value), and has only three distinct values. There could still be a
+very small amount of suppression, but so little as to not matter for the
+purpose of this attack.
 ''')
 
 print("\n-------------------  Prior Knowledge Phase  --------------------")
@@ -182,49 +225,22 @@ value held by the victim.
 ''')
 
 print('''
-First we need to know the relative ratio of frequency values. We
-can get these by querying the cloak with this query:
+First we need to compute the relative ratio of frequency values. We
+already queried for the frequency count histogram in the exploration
+phase. Compute the total number of users (approximate, since these are
+anonymized counts):
 ''')
-
-query = {}
-sql = '''
-SELECT frequency, count(*)
-FROM accounts
-GROUP BY 1
-'''
-
-print(sql)
-
-print('''
-Even this query is not specific to attacking a given victim, it counts
-as an attack query. The bounty prize does not depend on the number of
-attack queries, but we are nevertheless interested to know how many
-queries are required.
-''')
-
-query['sql'] = sql
-x.askAttack(query)
-reply = x.getAttack()
-
-print('''The response from the attack query is this:''')
-pp.pprint(reply)
 
 total = 0
-if 'answer' in reply:
-    for bucket in reply['answer']:
-        total += bucket[1]
-else:
-    print("Error in attack query")
-    pp.pprint(reply)
-    x.cleanUp()
-    quit()
+for bucket in freqHist:
+    total += bucket[1]
 
 print(f"The total number of users is {total}")
 
 ratios = {}
 noisyRatios = {}
 numFreqs = 0
-for bucket in reply['answer']:
+for bucket in freqHist:
     ratios[bucket[0]] = bucket[1]/total
     noisyRatios[bucket[0]] = 0      # initialize
     numFreqs += 1
@@ -251,6 +267,9 @@ is unique among all users. The singling out claims are of the form:
 Since firstname and lastname are probably unique, then if we guess the
 correct frequency value, the user is successfully singled out, and the
 confidence score improves.
+
+Now make the attack queries. This involves multiple queries per user, so
+takes a little time.....
 ''')
 
 totNumQueriesCorrect = 0
