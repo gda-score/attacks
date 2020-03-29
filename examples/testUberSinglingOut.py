@@ -84,20 +84,32 @@ difference = abs(average_value - true_value)
 # If the attack is successful, we get a value here that is close to the original one, so the difference is small
 print("The absolute difference between the averaged value and the true one is: ", difference)
 
-
-#x.cleanUp()
-
+x.cleanUp()
 
 
 
+# -------------------  Attack with several queries on the same budget  --------------------
 
-# make a new attack that will receive a fresh budget
-# would require changes in askAttack() to permit several queries at the same time
-# y = gdaAttack(params)
-# # More queries could be executed, e.g. on the accounts DB
-# query1 = {"sql": "Select count(*) from transactions where operation = 'VKLAD' ", "count": 2, "epsilon": "0.5", "budget":6}
-# query2 = {"sql": "Select count(*) from accounts", "count": 1, "epsilon": "2.0"}
-# querylist = [query1, query2]
-# y.askAttack(querylist)
-# replyCorrect = y.getAttack()
-# if v: pp.pprint(replyCorrect)
+
+# -------------------  Prior Knowledge Phase  --------------------
+# We use the prior knowledge for some values in the database.
+# For the given query, we know that the real value is = 181962
+# """Select count(*)
+#          from transactions
+#          where operation = 'VKLAD'
+#          """
+true_value = 181962
+# -------------------  Attack Phase  -----------------------------
+
+y = gdaAttack(params)
+# More queries could be executed, e.g. on the accounts DB
+query1 = {"sql": "Select count(*) from transactions where operation = 'VKLAD' ", "count": 2, "epsilon": "3", "budget":6}
+query2 = {"sql": "Select count(*) from accounts", "count": 1, "epsilon": "2.0","budget":6}
+querylist = [query1, query2]
+y.askAttack(querylist)
+replyCorrect = y.getAttack()
+if v: pp.pprint(replyCorrect)
+
+# -------------------  Claims Phase  ----------------------------
+# What we want to see here is that the second query is not execured anymore, because the budget is exceded by the two
+# first one (3*3=6 already)
