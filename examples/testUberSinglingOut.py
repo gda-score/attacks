@@ -52,21 +52,19 @@ x = gdaAttack(params)
 # This attack doesn't require any exploratory queries
 
 # -------------------  Prior Knowledge Phase  --------------------
-# This attack doesn't require any prior knowledge
+#
 
 # -------------------  Attack Phase  -----------------------------
 
-# The List attack, the simplest of attacks, simply requests a list
-# of counts for a set of column values, where each count is equal
-# to exactly one, and therefore has only a single uid.
+#
 
 query = {}
-sql = """select acct_date, acct_district_id, frequency, count(*)
-         from accounts
-         group by 1,2,3
-         having count(*) = 1
-         limit 10"""
+sql = """Select count(*)
+         from transactions
+         where operation = 'VKLAD'
+         """
 query['sql'] = sql
+query['count'] = 2 # how often to execute the query
 query['budget'] = 6.0
 query['epsilon'] = 2.0
 x.askAttack(query)
