@@ -55,7 +55,7 @@ x = gdaAttack(params)
 #          from transactions
 #          where operation = 'VKLAD'
 #          """
-
+true_value = 181962
 # -------------------  Attack Phase  -----------------------------
 
 query = {}
@@ -64,17 +64,40 @@ sql = """Select count(*)
          where operation = 'VKLAD'
          """
 query['sql'] = sql
-query['count'] = 3  # how often to execute the query
+query['count'] = 5  # how often to execute the query
 query['budget'] = 6.0
-query['epsilon'] = 3
+query['epsilon'] = 1
 x.askAttack(query)
 replyCorrect = x.getAttack()
 if v: pp.pprint(replyCorrect)
 
 # -------------------  Claims Phase  ----------------------------
 
+import statistics
+
 # see how close we get to the real value after averaging out the server replies
+answers = replyCorrect['answer']
+flat_values = [item for sublist in answers for item in sublist]
+average_value = statistics.mean(flat_values)
+difference = abs(average_value - true_value)
 
-x.cleanUp()
+# If the attack is successful, we get a value here that is close to the original one, so the difference is small
+print("The absolute difference between the averaged value and the true one is: ", difference)
 
-# here, potentially more queries could be executed, e.g. on the accounts DB
+
+#x.cleanUp()
+
+
+
+
+
+# make a new attack that will receive a fresh budget
+# would require changes in askAttack() to permit several queries at the same time
+# y = gdaAttack(params)
+# # More queries could be executed, e.g. on the accounts DB
+# query1 = {"sql": "Select count(*) from transactions where operation = 'VKLAD' ", "count": 2, "epsilon": "0.5", "budget":6}
+# query2 = {"sql": "Select count(*) from accounts", "count": 1, "epsilon": "2.0"}
+# querylist = [query1, query2]
+# y.askAttack(querylist)
+# replyCorrect = y.getAttack()
+# if v: pp.pprint(replyCorrect)
