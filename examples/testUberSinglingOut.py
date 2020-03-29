@@ -88,7 +88,7 @@ x.cleanUp()
 
 
 
-# -------------------  Attack with several queries on the same budget  --------------------
+# -------------------  Attack with several queries on the same budget: second one denied  --------------------
 
 
 # -------------------  Prior Knowledge Phase  --------------------
@@ -108,6 +108,36 @@ query2 = {"sql": "Select count(*) from accounts", "count": 1, "epsilon": "2.0","
 querylist = [query1, query2]
 y.askAttack(querylist)
 replyCorrect = y.getAttack()
+if v: pp.pprint(replyCorrect)
+
+# -------------------  Claims Phase  ----------------------------
+# What we want to see here is that the second query is not execured anymore, because the budget is exceded by the two
+# first one (3*3=6 already)
+y.cleanUp()
+
+
+
+
+# -------------------  Attack with several queries on the same budget  --------------------
+
+
+# -------------------  Prior Knowledge Phase  --------------------
+# We use the prior knowledge for some values in the database.
+# For the given query, we know that the real value is = 181962
+# """Select count(*)
+#          from transactions
+#          where operation = 'VKLAD'
+#          """
+true_value = 181962
+# -------------------  Attack Phase  -----------------------------
+
+z = gdaAttack(params)
+# More queries could be executed, e.g. on the accounts DB
+query1 = {"sql": "Select count(*) from transactions where operation = 'VKLAD' ", "count": 2, "epsilon": "1", "budget":6}
+query2 = {"sql": "Select count(*) from accounts", "count": 1, "epsilon": "2.0","budget":6}
+querylist = [query1, query2]
+z.askAttack(querylist)
+replyCorrect = z.getAttack()
 if v: pp.pprint(replyCorrect)
 
 # -------------------  Claims Phase  ----------------------------
