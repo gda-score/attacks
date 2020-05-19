@@ -324,10 +324,18 @@ for first,last in prior:
 # These parameters were used to determine if confidence could be raised for
 # certain attacks (and therefore not claiming lower-confidence attacks). This 
 # turned out not to be the case.
-avgNumQueriesCorrect = totNumQueriesCorrect / numCorrect
-avgNumQueriesWrong = totNumQueriesWrong / numWrong
-avgRatioExceedCorrect = totRatioExceedCorrect / numCorrect
-avgRatioExceedWrong = totRatioExceedWrong / numWrong
+if numCorrect:
+    avgNumQueriesCorrect = totNumQueriesCorrect / numCorrect
+    avgRatioExceedCorrect = totRatioExceedCorrect / numCorrect
+else:
+    avgNumQueriesCorrect = 0
+    avgRatioExceedCorrect = 0
+if numWrong:
+    avgNumQueriesWrong = totNumQueriesWrong / numWrong
+    avgRatioExceedWrong = totRatioExceedWrong / numWrong
+else:
+    avgNumQueriesWrong = 0
+    avgRatioExceedWrong = 0
 
 #print(f"numQueries: Correct: {avgNumQueriesCorrect}, Wrong: {avgNumQueriesWrong}")
 #print(f"ratioExceed: Correct: {avgRatioExceedCorrect}, Wrong: {avgRatioExceedWrong}")
