@@ -6,7 +6,7 @@
   },
   "anonTypes": [
     ["no_anon"],
-    ["diffix","v19_1_0"],
+    ["diffix","latest"],
     ["pseudonymization","colSuppression"],
     ["pseudonymization","kanon","k_2"],
     ["pseudonymization","kanon","k_5"],

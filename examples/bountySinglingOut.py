@@ -117,7 +117,7 @@ config = {
         "attackType": "Test",
         "criteria": "singlingOut"
     },
-    'anonTypes': [ ["diffix","v19_1_0"] ],
+    'anonTypes': [ ["diffix","latest"] ],
     'tables': [ ['banking','accounts'] ]
 }
 

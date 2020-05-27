@@ -5,7 +5,7 @@
     "criteria": "inference"
   },
   "anonTypes": [
-    ["diffix","v19_1_0"]
+    ["diffix","latest"]
   ],
   "tables": [
     ["banking","accounts"],
