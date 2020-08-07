@@ -91,7 +91,8 @@ def dumb_list_inference_attack(params):
             spec['known'] = known
             i = len(remainingCols)
             spec['guess'] = [{'col':guessedCol,'val':row[i]}]
-            attack.askClaim(spec)
+            if not attack.isClaimed(spec):
+                attack.askClaim(spec)
             while True:
                 reply = attack.getClaim()
                 if v: pp.pprint(reply)
