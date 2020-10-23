@@ -1,5 +1,11 @@
 import pprint
-from gdascore.gdaAttack import gdaAttack
+
+import os,sys,inspect
+sys.path.insert(1, 'C:/Users/fra82576/PycharmProjects/gda-score/code/gdascore')
+try:
+    from .gdaAttack import gdaAttack
+except ImportError:
+    from gdaAttack import gdaAttack
 from gdascore.gdaScore import gdaScores
 from gdascore.gdaTools import setupGdaAttackParameters
 from myUtilities import checkMatch
