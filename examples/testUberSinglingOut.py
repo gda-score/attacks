@@ -181,29 +181,15 @@ replyCorrect1 = z.getAttack()
 z.askAttack(query)
 replyCorrect2 = z.getAttack()
 
-# collect answers
-answers = [replyCorrect1['answer'], replyCorrect2['answer']]
-
 print("All answers are:")
 pp.pprint(replyCorrect1['answer'])
-pp.pprint(replyCorrect2['answer']) # here comes the answer: " [['Budget Exceeded Error']] "
+
+# As the budget was exceeded, there is no answer field, but an error instead:
+pp.pprint(replyCorrect2)
 
 # get attack can say how much of the bugdet is still available
 remaining_eps = replyCorrect2['remaining_dp_budget']
 budget_used = DP_EPSILON_BUDGET - remaining_eps
-print("Total budget used:")
-pp.pprint(budget_used)
-
-# see how close we get to the real value after averaging out the server replies
-def flatten(l):
-    return flatten(l[0]) + (flatten(l[1:]) if len(l) > 1 else []) if type(l) is list else [l]
-
-flat_values = flatten(answers)
-average_value = statistics.mean(flat_values)
-difference = abs(average_value - true_value)
-#
-# # If the attack is successful, we get a value here that is close to the original one, so the difference is small
-print("The absolute difference between the averaged value and the true one is: ", difference)
 print("The privacy budget used through the queries was epsilon= ", budget_used)
 
 
