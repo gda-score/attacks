@@ -83,15 +83,19 @@ pp.pprint(replyCorrect)
 
 
 # see how close we get to the real value after averaging out the server replies
-answers = replyCorrect['answer']
-flat_values = [item for sublist in answers for item in sublist]
-print(flat_values)
-average_value = statistics.mean(flat_values)
-difference = abs(average_value - true_value)
+if 'answer' in replyCorrect:
+    answers = replyCorrect['answer']
+    flat_values = [item for sublist in answers for item in sublist]
+    print(flat_values)
+    average_value = statistics.mean(flat_values)
+    difference = abs(average_value - true_value)
 
-# If the attack is successful, we get a value here that is close to the original one, so the difference is small
-print("The absolute difference between the averaged value and the true one is: ", difference)
-print("The privacy budget used through the queries was epsilon= ", budget_used)
+    # If the attack is successful, we get a value here that is close to the original one, so the difference is small
+    print("The absolute difference between the averaged value and the true one is: ", difference)
+    print("The privacy budget used through the queries was epsilon= ", budget_used)
+else:
+    print("Reply has an error")
+    pp.pprint(replyCorrect)
 
 
 x.cleanUp()
@@ -121,29 +125,34 @@ y.askAttack(query)
 replyCorrect2 = y.getAttack()
 
 # collect answers
-answers = [replyCorrect1['answer'], replyCorrect2['answer']]
+if 'answer' in replyCorrect1 and 'answer' in replyCorrect2:
+    answers = [replyCorrect1['answer'], replyCorrect2['answer']]
 
-print("All answers are:")
-pp.pprint(replyCorrect1['answer'])
-pp.pprint(replyCorrect2['answer'])
+    print("All answers are:")
+    pp.pprint(replyCorrect1['answer'])
+    pp.pprint(replyCorrect2['answer'])
 
-# get attack can say how much of the bugdet is still available
-remaining_eps = replyCorrect2['remaining_dp_budget']
-budget_used = DP_EPSILON_BUDGET - remaining_eps
-print("Total budget used:")
-pp.pprint(budget_used)
+    # get attack can say how much of the bugdet is still available
+    remaining_eps = replyCorrect2['remaining_dp_budget']
+    budget_used = DP_EPSILON_BUDGET - remaining_eps
+    print("Total budget used:")
+    pp.pprint(budget_used)
 
-# see how close we get to the real value after averaging out the server replies
-def flatten(l):
-    return flatten(l[0]) + (flatten(l[1:]) if len(l) > 1 else []) if type(l) is list else [l]
+    # see how close we get to the real value after averaging out the server replies
+    def flatten(l):
+        return flatten(l[0]) + (flatten(l[1:]) if len(l) > 1 else []) if type(l) is list else [l]
 
-flat_values = flatten(answers)
-average_value = statistics.mean(flat_values)
-difference = abs(average_value - true_value)
-#
-# # If the attack is successful, we get a value here that is close to the original one, so the difference is small
-print("The absolute difference between the averaged value and the true one is: ", difference)
-print("The privacy budget used through the queries was epsilon= ", budget_used)
+    flat_values = flatten(answers)
+    average_value = statistics.mean(flat_values)
+    difference = abs(average_value - true_value)
+    #
+    # # If the attack is successful, we get a value here that is close to the original one, so the difference is small
+    print("The absolute difference between the averaged value and the true one is: ", difference)
+    print("The privacy budget used through the queries was epsilon= ", budget_used)
+else:
+    print("Reply has an error")
+    pp.pprint(replyCorrect1)
+    pp.pprint(replyCorrect2)
 
 
 y.cleanUp()
@@ -170,16 +179,21 @@ replyCorrect1 = z.getAttack()
 z.askAttack(query)
 replyCorrect2 = z.getAttack()
 
-print("All answers are:")
-pp.pprint(replyCorrect1['answer'])
+if 'answer' in replyCorrect1 and 'answer' in replyCorrect2:
+    print("All answers are:")
+    pp.pprint(replyCorrect1['answer'])
 
-# As the budget was exceeded, there is no answer field, but an error instead:
-pp.pprint(replyCorrect2)
+    # As the budget was exceeded, there is no answer field, but an error instead:
+    pp.pprint(replyCorrect2)
 
-# get attack can say how much of the bugdet is still available
-remaining_eps = replyCorrect2['remaining_dp_budget']
-budget_used = DP_EPSILON_BUDGET - remaining_eps
-print("The privacy budget used through the queries was epsilon= ", budget_used)
+    # get attack can say how much of the bugdet is still available
+    remaining_eps = replyCorrect2['remaining_dp_budget']
+    budget_used = DP_EPSILON_BUDGET - remaining_eps
+    print("The privacy budget used through the queries was epsilon= ", budget_used)
+else:
+    print("Reply has an error")
+    pp.pprint(replyCorrect1)
+    pp.pprint(replyCorrect2)
 
 
 z.cleanUp()
