@@ -1,23 +1,9 @@
 import pprint
 import statistics
 import sys
-
-# currently need this to execute the local version of the project.
-# when updated attack class is deployed, this line is obsolete
-#sys.path.insert(1, 'C:/Users/fra82576/PycharmProjects/gda-score/code/gdascore')
-sys.path.insert(1, 'C:/Users/francis/Documents/code/python/ubertest/code/gdascore')
-
-
-try:
-    from .gdaAttack import gdaAttack
-except ImportError:
-    from gdaAttack import gdaAttack
-    from gdaScore import gdaScores
-    from gdaTools import setupGdaAttackParameters
-else:
-    from gdascore.gdaScore import gdaScores
-    from gdascore.gdaTools import setupGdaAttackParameters
-
+from gdascore.gdaAttack import gdaAttack
+from gdascore.gdaScore import gdaScores
+from gdascore.gdaTools import setupGdaAttackParameters
 
 # Anon: None
 # Attack: Identify values by averaging out the noise
