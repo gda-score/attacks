@@ -94,7 +94,10 @@ if 'answer' in replyCorrect:
     print("The absolute difference between the averaged value and the true one is: ", difference)
     print("The privacy budget used through the queries was epsilon= ", budget_used)
 else:
-    print("Reply has an error")
+    if "Budget Exceeded" in replyCorrect['error']:
+        print("Budget exceeded!")
+    else:
+        print("Reply has an error")
     pp.pprint(replyCorrect)
 
 
@@ -149,10 +152,19 @@ if 'answer' in replyCorrect1 and 'answer' in replyCorrect2:
     # # If the attack is successful, we get a value here that is close to the original one, so the difference is small
     print("The absolute difference between the averaged value and the true one is: ", difference)
     print("The privacy budget used through the queries was epsilon= ", budget_used)
-else:
-    print("Reply has an error")
-    pp.pprint(replyCorrect1)
-    pp.pprint(replyCorrect2)
+else: 
+    if 'error' in replyCorrect1:
+        if "Budget Exceeded" in replyCorrect1['error']:
+            print("Budget exceeded!")
+        else:
+            print("Reply has an error")
+        pp.pprint(replyCorrect1)
+    if 'error' in replyCorrect2:
+        if "Budget Exceeded" in replyCorrect2['error']:
+            print("Budget exceeded!")
+        else:
+            print("Reply has an error")
+        pp.pprint(replyCorrect2)
 
 
 y.cleanUp()
@@ -191,9 +203,17 @@ if 'answer' in replyCorrect1 and 'answer' in replyCorrect2:
     budget_used = DP_EPSILON_BUDGET - remaining_eps
     print("The privacy budget used through the queries was epsilon= ", budget_used)
 else:
-    print("Reply has an error")
-    pp.pprint(replyCorrect1)
-    pp.pprint(replyCorrect2)
-
+    if 'error' in replyCorrect1:
+        if "Budget Exceeded" in replyCorrect1['error']:
+            print("Budget exceeded!")
+        else:
+            print("Reply has an error")
+        pp.pprint(replyCorrect1)
+    if 'error' in replyCorrect2:
+        if "Budget Exceeded" in replyCorrect2['error']:
+            print("Budget exceeded!")
+        else:
+            print("Reply has an error")
+        pp.pprint(replyCorrect2)
 
 z.cleanUp()
